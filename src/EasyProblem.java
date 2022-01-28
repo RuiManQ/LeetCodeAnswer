@@ -146,13 +146,39 @@ public class EasyProblem {
 
     }
 
+    static public class NUM26_Solution {
+        public int removeDuplicates(int[] nums) {
+            int length = nums.length;
+            if (length == 0 || length == 1)
+                return length;
+            int temp = nums[0];
+            int tempIndex = 0;
+            boolean flag = false;
+            for (int i = 1; i < length; i++) {
+                while (nums[i] == temp) {
+                    i++;
+                    if (i == length) {
+                        flag = true;
+                        break;
+                    }
+                }
+                    if (!flag) {
+                        nums[++tempIndex] = nums[i];
+                        temp = nums[i];
+                    }
+                }
+                return tempIndex+1;
+            }
+
+    }
     public static void main(String args[]) {
-        NUM21_Solution solution = new NUM21_Solution();
-        int[] l1 ={1,2,4};
-        int[] l2 = {1,3,4};
-        ListNode l1_list = solution.creatListNode(l1);
-        ListNode l2_list = solution.creatListNode(l2);
-        ListNode result = solution.mergeTwoLists(l1_list,l2_list);
-        solution.printListNode(result);
+        NUM26_Solution solution = new NUM26_Solution();
+        int[] nums = {0,0};
+        int len = solution.removeDuplicates(nums);
+//        System.out.println(len);
+        for(int i=0;i<len;i++){
+            System.out.println(nums[i]);
+        }
+
     }
 }
