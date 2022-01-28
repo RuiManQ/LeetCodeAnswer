@@ -171,10 +171,32 @@ public class EasyProblem {
             }
 
     }
+    static public class NUM27_Solution {
+        public int removeElement(int[] nums, int val) {
+            int length = nums.length;
+            if (length == 0)
+                return length;
+            int tempIndex = 0;
+            boolean flag = false;
+            for (int i = 0; i < length; i++) {
+                while (nums[i] == val) {
+                    i++;
+                    if (i == length) {
+                        flag = true;
+                        break;
+                    }
+                }
+                if (!flag) {
+                    nums[tempIndex++] = nums[i];
+                }
+            }
+            return tempIndex;
+        }
+    }
     public static void main(String args[]) {
-        NUM26_Solution solution = new NUM26_Solution();
-        int[] nums = {0,0};
-        int len = solution.removeDuplicates(nums);
+        NUM27_Solution solution = new NUM27_Solution();
+        int[] nums = {1};
+        int len = solution.removeElement(nums,1);
 //        System.out.println(len);
         for(int i=0;i<len;i++){
             System.out.println(nums[i]);
