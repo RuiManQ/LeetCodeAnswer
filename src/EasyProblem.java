@@ -1,3 +1,5 @@
+import java.util.Stack;
+
 public class EasyProblem {
     static class NUM13_Solution {
         public int romanToInt(String s) {
@@ -52,9 +54,41 @@ public class EasyProblem {
             return true;
         }
     }
+    static public class NUM20_Solution{
+        public boolean isValid(String s) {
+            Stack<Character> myStack = new Stack<>();
+            int length = s.length();
+            for(int i=0;i<length;i++){
+                if(s.charAt(i)=='('||s.charAt(i)=='['||s.charAt(i)=='{'){
+                    myStack.push(s.charAt(i));
+                }
+                else {
+                    if(myStack.isEmpty()){
+                        return false;
+                    }
+                    Character temp = myStack.pop();
+                    if(!isMatch(temp,s.charAt(i))){
+                        return false;
+                    }
+                }
+            }
+            if(myStack.empty())
+                return true;
+            else
+                return false;
+        }
+
+        public boolean isMatch(Character A, Character B) {
+            if ((A == '(' && B == ')') || (A == '[' && B == ']') || (A == '{' && B == '}')) {
+                return
+                        true;
+            } else
+                return false;
+        }
+    }
     public static void main(String args[]) {
-        NUM14_Solution solution = new NUM14_Solution();
-        String[] strs = {"flower","flow","flight"};
-        System.out.println(solution.longestCommonPrefix(strs));
+        NUM20_Solution solution = new NUM20_Solution();
+        String s= "]";
+        System.out.println(solution.isValid(s));
     }
 }
