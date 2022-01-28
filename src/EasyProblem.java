@@ -28,51 +28,51 @@ public class EasyProblem {
         }
     }
 
-    static class NUM14_Solution{
-        public String longestCommonPrefix(String[] strs){
+    static class NUM14_Solution {
+        public String longestCommonPrefix(String[] strs) {
             int size = strs.length;
             int MaxIndex = 0;
             int shortestLength = strs[0].length();
-            for(int i=1;i<size;i++){
-                if(shortestLength > strs[i].length())
+            for (int i = 1; i < size; i++) {
+                if (shortestLength > strs[i].length())
                     shortestLength = strs[i].length();
             }
-            for(;MaxIndex<shortestLength; MaxIndex++){
-                if(!StringSamePre(strs,MaxIndex,size))
+            for (; MaxIndex < shortestLength; MaxIndex++) {
+                if (!StringSamePre(strs, MaxIndex, size))
                     break;
             }
-            if(MaxIndex ==0){
+            if (MaxIndex == 0) {
                 return "";
-            }
-            else return strs[0].substring(0,MaxIndex);
+            } else return strs[0].substring(0, MaxIndex);
         }
-        public boolean StringSamePre(String[] strs,int index,int size){
-            for(int i=1;i<size;i++){
-                if(strs[i].charAt(index) != strs[0].charAt(index))
+
+        public boolean StringSamePre(String[] strs, int index, int size) {
+            for (int i = 1; i < size; i++) {
+                if (strs[i].charAt(index) != strs[0].charAt(index))
                     return false;
             }
             return true;
         }
     }
-    static public class NUM20_Solution{
+
+    static public class NUM20_Solution {
         public boolean isValid(String s) {
             Stack<Character> myStack = new Stack<>();
             int length = s.length();
-            for(int i=0;i<length;i++){
-                if(s.charAt(i)=='('||s.charAt(i)=='['||s.charAt(i)=='{'){
+            for (int i = 0; i < length; i++) {
+                if (s.charAt(i) == '(' || s.charAt(i) == '[' || s.charAt(i) == '{') {
                     myStack.push(s.charAt(i));
-                }
-                else {
-                    if(myStack.isEmpty()){
+                } else {
+                    if (myStack.isEmpty()) {
                         return false;
                     }
                     Character temp = myStack.pop();
-                    if(!isMatch(temp,s.charAt(i))){
+                    if (!isMatch(temp, s.charAt(i))) {
                         return false;
                     }
                 }
             }
-            if(myStack.empty())
+            if (myStack.isEmpty())
                 return true;
             else
                 return false;
@@ -86,9 +86,73 @@ public class EasyProblem {
                 return false;
         }
     }
+
+    static public class NUM21_Solution {
+        public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
+            if (list1 == null)
+                return list2;
+            if (list2 == null)
+                return list1;
+            ListNode result;
+            ListNode pre;
+            if(list1.val<list2.val){
+                result = list1;
+                list1 = list1.next;
+            }
+            else{
+                result =list2;
+                list2 = list2.next;
+            }
+            pre = result;
+            while(list1!=null&&list2!=null){
+                if(list1.val<list2.val){
+                    pre.next =list1;
+                    list1 = list1.next;
+                    pre = pre.next;
+                }
+                else{
+                    pre.next =list2;
+                    list2 = list2.next;
+                    pre = pre.next;
+                }
+            }
+            if(list1!=null){
+                pre.next = list1;
+            }
+            if(list2!=null){
+                pre.next = list2;
+            }
+            return result;
+        }
+        public void printListNode(ListNode head){
+            while(head!=null){
+                System.out.println(head.val);
+                head = head.next;
+            }
+        }
+        public ListNode creatListNode(int[] nums){
+            int length = nums.length;
+            if(length == 0)
+                return null;
+            ListNode listNode = new ListNode(nums[0]);
+            ListNode pre = listNode;
+            for(int i=1;i<length;i++){
+                ListNode temp = new ListNode(nums[i]);
+                pre.next = temp;
+                pre = pre.next;
+            }
+            return listNode;
+        }
+
+    }
+
     public static void main(String args[]) {
-        NUM20_Solution solution = new NUM20_Solution();
-        String s= "]";
-        System.out.println(solution.isValid(s));
+        NUM21_Solution solution = new NUM21_Solution();
+        int[] l1 ={1,2,4};
+        int[] l2 = {1,3,4};
+        ListNode l1_list = solution.creatListNode(l1);
+        ListNode l2_list = solution.creatListNode(l2);
+        ListNode result = solution.mergeTwoLists(l1_list,l2_list);
+        solution.printListNode(result);
     }
 }
