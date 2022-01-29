@@ -90,6 +90,73 @@ public class MiddleProblem {
             return result.toString();
         }
     }
+    static public class NUM7_Solution {
+        public int reverse(int x) {
+            if (x == 0)
+                return x;
+            boolean isPositive = true;
+            if (x < 0) {
+                isPositive = false;
+                x = -x;
+            }
+            if (isPositive)
+                return reversePositive(x);
+            else
+                return -reversePositive(x);
+        }
+
+        public int reversePositive(int x) {
+            int result = 0;
+            while (x % 10 == 0) {
+                x = x / 10;
+            }
+            while(x!=0){
+                if (result< Integer.MIN_VALUE / 10 || result > Integer.MAX_VALUE / 10) {
+                    return 0;
+                }
+                result = result*10+x%10;
+                x=x/10;
+            }
+            return result;
+        }
+    }
+
+    static public class NUM11_Solution{
+        //没有注意时间复杂度，超出时间限制，2 <= n <= 105，所以时间复杂度不能为O(n^2)
+        public int wrongmaxArea(int[] height) {
+            int max = 0;
+            for(int i=0;i<height.length;i++){
+                int area = 0;
+                for(int j=i+1;j< height.length;j++){
+                    area = Math.min(height[i],height[j])*(j-i);
+                    if(max<area){
+                        max = area;
+                    }
+
+                }
+            }
+            return max;
+        }
+        //双指针法，移动较小的那个指针，知道两个指针重合
+        public int maxArea(int[] height) {
+            int max = 0;
+            int length = height.length;
+            int left= 0;
+            int right = length-1;
+            while(left!=right){
+                int  area = Math.min(height[left],height[right])*(right-left);
+                if(max<area){
+                    max = area;
+                }
+                if(height[left]<height[right]){
+                    left++;
+                }else {
+                    right--;
+                }
+            }
+            return max;
+        }
+    }
 
     public static void main(String[] args) {
         NUM6_Solution solution = new NUM6_Solution();
