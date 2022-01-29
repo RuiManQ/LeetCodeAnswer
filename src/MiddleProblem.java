@@ -1,3 +1,6 @@
+import java.util.LinkedList;
+import java.util.List;
+
 public class MiddleProblem {
     static public class NUM3_Solution {
         public int lengthOfLongestSubstring(String s) {
@@ -20,7 +23,7 @@ public class MiddleProblem {
     }
 
     static public class NUM5_Solution {
-        //用了笨办法，遍历字符串，分别艺每一个字符串为中心，向两边发散，检验是否为回文字符串，注意考虑奇数和偶数的情况
+        //用了笨办法，遍历字符串，分别以每一个字符串为中心，向两边发散，检验是否为回文字符串，注意考虑奇数和偶数的情况
         public String longestPalindrome(String s) {
             int length = s.length();
             if (length == 0 || length == 1)
@@ -51,17 +54,47 @@ public class MiddleProblem {
                     index = i;
                 }
             }
-            if(maxLength%2!=0){
-            return s.substring(index - (maxLength - 1) / 2, index + (maxLength - 1) / 2 + 1);}
-            else return
-            s.substring(index-maxLength/2+1,index+maxLength/2+1);
+            if (maxLength % 2 != 0) {
+                return s.substring(index - (maxLength - 1) / 2, index + (maxLength - 1) / 2 + 1);
+            } else return
+                    s.substring(index - maxLength / 2 + 1, index + maxLength / 2 + 1);
+        }
+    }
+
+    static public class NUM6_Solution {
+        public String convert(String s, int numRows) {
+            if (s.length() <= numRows || numRows == 1)
+                return s;
+            LinkedList[] temp = new LinkedList[numRows];
+            StringBuilder result = new StringBuilder();
+            boolean isDirectionDown = true;
+            int flag = 0;
+            for (int i = 0; i < s.length(); i++) {
+                if (temp[flag] == null)
+                    temp[flag] = new LinkedList();
+                temp[flag].add(s.charAt(i));
+                if (isDirectionDown) {
+                    flag++;
+                } else {
+                    flag--;
+                }
+                if (flag == 0 || flag == numRows - 1) {
+                    isDirectionDown = !isDirectionDown;
+                }
+            }
+            for (int i = 0; i < numRows; i++) {
+                for (int j = 0; j < temp[i].size(); j++) {
+                    result.append(temp[i].get(j));
+                }
+            }
+            return result.toString();
         }
     }
 
     public static void main(String[] args) {
-        NUM5_Solution solution = new NUM5_Solution();
-        String s = "ac";
-        System.out.println(solution.longestPalindrome(s));
+        NUM6_Solution solution = new NUM6_Solution();
+        String s = "P";
+        System.out.println(solution.convert(s, 1));
 
     }
 }
