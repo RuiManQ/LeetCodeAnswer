@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -90,6 +91,7 @@ public class MiddleProblem {
             return result.toString();
         }
     }
+
     static public class NUM7_Solution {
         public int reverse(int x) {
             if (x == 0)
@@ -110,26 +112,26 @@ public class MiddleProblem {
             while (x % 10 == 0) {
                 x = x / 10;
             }
-            while(x!=0){
-                if (result< Integer.MIN_VALUE / 10 || result > Integer.MAX_VALUE / 10) {
+            while (x != 0) {
+                if (result < Integer.MIN_VALUE / 10 || result > Integer.MAX_VALUE / 10) {
                     return 0;
                 }
-                result = result*10+x%10;
-                x=x/10;
+                result = result * 10 + x % 10;
+                x = x / 10;
             }
             return result;
         }
     }
 
-    static public class NUM11_Solution{
+    static public class NUM11_Solution {
         //没有注意时间复杂度，超出时间限制，2 <= n <= 105，所以时间复杂度不能为O(n^2)
         public int wrongmaxArea(int[] height) {
             int max = 0;
-            for(int i=0;i<height.length;i++){
+            for (int i = 0; i < height.length; i++) {
                 int area = 0;
-                for(int j=i+1;j< height.length;j++){
-                    area = Math.min(height[i],height[j])*(j-i);
-                    if(max<area){
+                for (int j = i + 1; j < height.length; j++) {
+                    area = Math.min(height[i], height[j]) * (j - i);
+                    if (max < area) {
                         max = area;
                     }
 
@@ -137,20 +139,21 @@ public class MiddleProblem {
             }
             return max;
         }
+
         //双指针法，移动较小的那个指针，知道两个指针重合
         public int maxArea(int[] height) {
             int max = 0;
             int length = height.length;
-            int left= 0;
-            int right = length-1;
-            while(left!=right){
-                int  area = Math.min(height[left],height[right])*(right-left);
-                if(max<area){
+            int left = 0;
+            int right = length - 1;
+            while (left != right) {
+                int area = Math.min(height[left], height[right]) * (right - left);
+                if (max < area) {
                     max = area;
                 }
-                if(height[left]<height[right]){
+                if (height[left] < height[right]) {
                     left++;
-                }else {
+                } else {
                     right--;
                 }
             }
@@ -158,10 +161,79 @@ public class MiddleProblem {
         }
     }
 
-    public static void main(String[] args) {
-        NUM6_Solution solution = new NUM6_Solution();
-        String s = "P";
-        System.out.println(solution.convert(s, 1));
+    static public class NUM12_Solution {
+        int[] values = {1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1};
+        String[] symbols = {"M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"};
 
+        public String intToRoman(int num) {
+            StringBuilder result = new StringBuilder();
+            for (int i = 0; i < values.length; i++) {
+                int value = values[i];
+                String symbol = symbols[i];
+                while (num >= value) {
+                    num -= value;
+                    result.append(symbol);
+                }
+                if (num == 0)
+                    break;
+            }
+            return result.toString();
+        }
+    }
+
+    static public class NUM15_Solution {
+        public List<List<Integer>> threeSum(int[] nums) {
+            List<List<Integer>> result = new ArrayList<>();
+            if (nums.length < 3){
+                return result;
+            }
+            sort(nums);
+            for (int i = 0; i < nums.length - 2; i++) {
+                while (i > 0 && nums[i] == nums[i - 1] && i < nums.length - 2) {
+                    i++;
+                }
+                int left = i + 1;
+                int right = nums.length - 1;
+                while (left < right ) {
+                    if (nums[i] + nums[left] + nums[right] < 0) {
+                        left++;
+                    } else if (nums[i] + nums[left] + nums[right] > 0) {
+                        right--;
+                    } else {
+                        List<Integer> temp = new ArrayList<>();
+                        temp.add(nums[i]);
+                        temp.add(nums[left]);
+                        temp.add(nums[right]);
+                        result.add(temp);
+                        left++;
+                        right--;
+                        int templeft = left-1;
+                        while (nums[left] == nums[templeft] && left < right) {
+                            left++;
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+
+        public void sort(int[] nums) {
+            int temp;
+            for (int i = 0; i < nums.length - 1; i++) {
+                for (int j = nums.length - 1; j > i; j--) {
+                    if (nums[j] < nums[j - 1]) {
+                        temp = nums[j];
+                        nums[j] = nums[j - 1];
+                        nums[j - 1] = temp;
+                    }
+                }
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        NUM15_Solution solution = new NUM15_Solution();
+        int[] nums = {-2,0,0,2,2};
+        System.out.println(solution.threeSum(nums));
     }
 }
