@@ -140,7 +140,7 @@ public class MiddleProblem {
             return max;
         }
 
-        //双指针法，移动较小的那个指针，知道两个指针重合
+        //双指针法，移动较小的那个指针，直到两个指针重合
         public int maxArea(int[] height) {
             int max = 0;
             int length = height.length;
@@ -184,7 +184,7 @@ public class MiddleProblem {
     static public class NUM15_Solution {
         public List<List<Integer>> threeSum(int[] nums) {
             List<List<Integer>> result = new ArrayList<>();
-            if (nums.length < 3){
+            if (nums.length < 3) {
                 return result;
             }
             sort(nums);
@@ -194,7 +194,7 @@ public class MiddleProblem {
                 }
                 int left = i + 1;
                 int right = nums.length - 1;
-                while (left < right ) {
+                while (left < right) {
                     if (nums[i] + nums[left] + nums[right] < 0) {
                         left++;
                     } else if (nums[i] + nums[left] + nums[right] > 0) {
@@ -207,7 +207,7 @@ public class MiddleProblem {
                         result.add(temp);
                         left++;
                         right--;
-                        int templeft = left-1;
+                        int templeft = left - 1;
                         while (nums[left] == nums[templeft] && left < right) {
                             left++;
                         }
@@ -217,7 +217,7 @@ public class MiddleProblem {
             return result;
         }
 
-        public void sort(int[] nums) {
+        public static void sort(int[] nums) {
             int temp;
             for (int i = 0; i < nums.length - 1; i++) {
                 for (int j = nums.length - 1; j > i; j--) {
@@ -231,9 +231,139 @@ public class MiddleProblem {
         }
     }
 
+    static public class NUM16_Solution {
+        public int threeSumClosest(int[] nums, int target) {
+            NUM15_Solution.sort(nums);
+            int result = nums[0] + nums[1] + nums[2];
+            for (int i = 0; i < nums.length - 2; i++) {
+                int left = i + 1;
+                int right = nums.length - 1;
+                while (left < right) {
+                    int temp = nums[i] + nums[left] + nums[right];
+                    if (temp <= target) {
+                        left++;
+                        if (Math.abs(temp - target) < Math.abs(result - target)) {
+                            result = temp;
+                        }
+                    } else {
+                        right--;
+                        if (Math.abs(temp - target) < Math.abs(result - target)) {
+                            result = temp;
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+    }
+
+    static public class NUM17_Solution {
+        //最笨的办法：枚举传入字符串的长度，分别做处理
+        public List<String> letterCombinations(String digits) {
+            int length = digits.length();
+            String[] chars = {"abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+            List<String> result = new ArrayList<>();
+            int[] temp = new int[length];
+            for (int i = 0; i < length; i++) {
+                temp[i] = digits.charAt(i) - '2';
+            }
+            switch (length) {
+                case 1:
+                    for (int i = 0; i < chars[temp[0]].length(); i++) {
+                        result.add(chars[temp[0]].substring(i, i + 1));
+                    }
+                    return result;
+                case 2:
+                    for (int i = 0; i < chars[temp[0]].length(); i++) {
+                        for (int j = 0; j < chars[temp[1]].length(); j++) {
+                            String stringBuilder = String.valueOf(chars[temp[0]].charAt(i)) +
+                                    chars[temp[1]].charAt(j);
+                            result.add(stringBuilder);
+                        }
+                    }
+                    return result;
+                case 3:
+                    for (int i = 0; i < chars[temp[0]].length(); i++) {
+                        for (int j = 0; j < chars[temp[1]].length(); j++) {
+                            for (int k = 0; k < chars[temp[2]].length(); k++) {
+                                String stringBuilder = String.valueOf(chars[temp[0]].charAt(i)) +
+                                        chars[temp[1]].charAt(j) + chars[temp[2]].charAt(k);
+                                result.add(stringBuilder);
+                            }
+                        }
+                    }
+                    return result;
+                case 4:
+                    for (int i = 0; i < chars[temp[0]].length(); i++) {
+                        for (int j = 0; j < chars[temp[1]].length(); j++) {
+                            for (int k = 0; k < chars[temp[2]].length(); k++) {
+                                for (int p = 0; p < chars[temp[3]].length(); p++) {
+                                    String stringBuilder = String.valueOf(chars[temp[0]].charAt(i)) +
+                                            chars[temp[1]].charAt(j) + chars[temp[2]].charAt(k) + chars[temp[3]].charAt(p);
+                                    result.add(stringBuilder);
+                                }
+                            }
+                        }
+                    }
+                    return result;
+                default:
+                    return result;
+            }
+        }
+
+    }
+
+    static public class NumX_Solution {
+        public List<List<Integer>> permute(int[] nums) {
+            List<List<Integer>> result = new ArrayList<>();
+            int length = nums.length;
+            if (length == 0) {
+                return result;
+            }
+            boolean[] used = new boolean[length];
+            List<Integer> path = new ArrayList<>();
+            dfs(nums, length, 0, path, used, result);
+            return result;
+        }
+
+        private void dfs(int[] nums, int length, int depth, List<Integer> path, boolean[] used, List<List<Integer>> res) {
+            //在叶子节点处，将路径存入结果
+            if (depth == length) {
+                res.add(new ArrayList<>(path) {
+                });
+                return;
+            }
+            //在非叶子节点：
+            for (int i = 0; i < length; i++) {
+                if(used[i]){
+                    continue;
+                }
+                if(i>0&& nums[i] == nums[i - 1]&& !used[i-1]){
+                    continue;
+                }
+                    path.add(nums[i]);
+                    used[i] = true;
+                    System.out.println("  递归之前 => " + path);
+                    dfs(nums, length, depth + 1, path, used, res);
+                    System.out.println("递归之后 => " + path);
+                    used[i] = false;
+
+
+                    path.remove(path.size() - 1);
+
+            }
+        }
+    }
+
     public static void main(String[] args) {
-        NUM15_Solution solution = new NUM15_Solution();
-        int[] nums = {-2,0,0,2,2};
-        System.out.println(solution.threeSum(nums));
+        NumX_Solution solution = new NumX_Solution();
+        int[] test = {1, 3, 3};
+        System.out.println(solution.permute(test));
+        System.out.println(test);
+//        String test = "123456";
+//        for(int i=0;i<test.length();i++) {
+//            int flag = test.charAt(i) - '1';
+//            System.out.println(flag);
+//        }
     }
 }
