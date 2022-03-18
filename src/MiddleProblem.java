@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -423,11 +424,115 @@ public class MiddleProblem {
 
     }
 
+
+    static public class Num130_Solution {
+        public void solve(char[][] board) {
+            int h = board.length, w = board[0].length;
+            if (h <= 1 || w <= 1) {
+                return;
+            }
+            int[][] checkResult = new int[h][w];
+            for (int i = 0; i < h; i++) {
+                if (board[i][0] == 'O' && checkResult[i][0] == 0) {
+                    dfs(board, i, 0, checkResult);
+                }
+                if (board[i][w - 1] == 'O' && checkResult[i][w - 1] == 0) {
+                    dfs(board, i, w - 1, checkResult);
+                }
+            }
+            for (int i = 0; i < w; i++) {
+                if (board[0][i] == 'O' && checkResult[0][i] == 0) {
+                    dfs(board, 0, i, checkResult);
+                }
+                if (board[h - 1][i] == 'O' && checkResult[h-1][i] == 0) {
+                    dfs(board, h - 1, i, checkResult);
+                }
+            }
+
+            for (int i = 0; i < h; i++) {
+                System.out.println(Arrays.toString(checkResult[i]));
+
+            }
+            for (int i = 0; i < h; i++) {
+                for (int j = 0; j < w; j++) {
+                    if (board[i][j] == 'O' && checkResult[i][j] == 0) {
+                        board[i][j] = 'X';
+                    }
+                }
+            }
+
+        }
+
+        public void dfs(char[][] board, int i, int j, int[][] checkResult) {
+            if (i < 0 || j < 0 || i >= board.length || j >= board[0].length || checkResult[i][j] == 1) {
+                return;
+            }
+            if (board[i][j] == 'O') {
+                checkResult[i][j] = 1;
+            } else {
+                return;
+            }
+            dfs(board, i + 1, j, checkResult);
+            dfs(board, i - 1, j, checkResult);
+            dfs(board, i, j + 1, checkResult);
+            dfs(board, i, j - 1, checkResult);
+        }
+    }
+
+    class Num130_Solution_TimeLimitted {
+        public void solve(char[][] board) {
+        int h = board.length, w = board[0].length;
+        boolean[][] visited = new boolean[h][w];
+        boolean[][] checkResult = new boolean[h][w];
+        for (int i = 0; i < h; i++) {
+            for (int j = 0; j < w; j++) {
+                if (board[i][j] == 'O') {
+                    if (!checkGoOut(board, i, j, visited,checkResult)) {
+                        board[i][j] = 'X';
+                    }
+                }
+            }
+        }
+    }
+        public boolean checkGoOut(char[][] board, int i, int j, boolean[][] visited, boolean[][] checkResult) {
+
+            //返回值为true表示能到达外面
+            if (i == 0 || i == board.length - 1 || j == 0 || j == board[0].length - 1) {
+                return true;
+            }
+            visited[i][j] = true;
+            int[][] directions = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+            boolean result = false;
+            for (int[] dir : directions) {
+                int newi = i + dir[0], newj = j + dir[1];
+                if (board[newi][newj] == 'O' && !visited[newi][newj]) {
+                    if (!checkResult[newi][newj]) {
+                        if (checkGoOut(board, newi, newj, visited, checkResult)) {
+                            checkResult[newi][newj] = true;
+                            result = true;
+                            break;
+                        }
+                    }else{
+                        result = true;
+                        break;
+                    }
+                }
+            }
+            visited[i][j] = false;
+            return result;
+        }
+    }
     public static void main(String[] args) {
-        Num79_Solution solution = new Num79_Solution();
-        char[][] board = {{'A', 'B', 'C', 'E'}, {'S', 'F', 'C', 'S'}, {'A', 'D', 'E', 'E'}};
-        String word = "ABCCED";
-        System.out.println(solution.exist(board, word));
+        Num130_Solution solution = new Num130_Solution();
+//        char[][] board = {{'X', 'X', 'X', 'X'}, {'X', 'O', 'O', 'X'}, {'X', 'X', 'O', 'X'}, {'X', 'O', 'X', 'X'}};
+        char[][] board = {{'X', 'O', 'X', 'O', 'X', 'O'},{'O', 'X', 'O', 'X', 'O', 'X'}, {'X', 'O', 'X', 'O', 'X', 'O'},{'O', 'X', 'O', 'X', 'O', 'X'}};
+        solution.solve(board);
+        for (int i = 0; i < board.length; i++) {
+//            for(int j=0;j<board[0].length;j++){
+//                System.out.println(board[i][j]);
+//            }
+            System.out.println(board[i]);
+        }
 //        String test = "123456";
 //        for(int i=0;i<test.length();i++) {
 //            int flag = test.charAt(i) - '1';
