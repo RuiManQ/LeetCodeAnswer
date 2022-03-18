@@ -444,7 +444,7 @@ public class MiddleProblem {
                 if (board[0][i] == 'O' && checkResult[0][i] == 0) {
                     dfs(board, 0, i, checkResult);
                 }
-                if (board[h - 1][i] == 'O' && checkResult[h-1][i] == 0) {
+                if (board[h - 1][i] == 'O' && checkResult[h - 1][i] == 0) {
                     dfs(board, h - 1, i, checkResult);
                 }
             }
@@ -481,19 +481,20 @@ public class MiddleProblem {
 
     class Num130_Solution_TimeLimitted {
         public void solve(char[][] board) {
-        int h = board.length, w = board[0].length;
-        boolean[][] visited = new boolean[h][w];
-        boolean[][] checkResult = new boolean[h][w];
-        for (int i = 0; i < h; i++) {
-            for (int j = 0; j < w; j++) {
-                if (board[i][j] == 'O') {
-                    if (!checkGoOut(board, i, j, visited,checkResult)) {
-                        board[i][j] = 'X';
+            int h = board.length, w = board[0].length;
+            boolean[][] visited = new boolean[h][w];
+            boolean[][] checkResult = new boolean[h][w];
+            for (int i = 0; i < h; i++) {
+                for (int j = 0; j < w; j++) {
+                    if (board[i][j] == 'O') {
+                        if (!checkGoOut(board, i, j, visited, checkResult)) {
+                            board[i][j] = 'X';
+                        }
                     }
                 }
             }
         }
-    }
+
         public boolean checkGoOut(char[][] board, int i, int j, boolean[][] visited, boolean[][] checkResult) {
 
             //返回值为true表示能到达外面
@@ -512,7 +513,7 @@ public class MiddleProblem {
                             result = true;
                             break;
                         }
-                    }else{
+                    } else {
                         result = true;
                         break;
                     }
@@ -522,17 +523,43 @@ public class MiddleProblem {
             return result;
         }
     }
-    public static void main(String[] args) {
-        Num130_Solution solution = new Num130_Solution();
-//        char[][] board = {{'X', 'X', 'X', 'X'}, {'X', 'O', 'O', 'X'}, {'X', 'X', 'O', 'X'}, {'X', 'O', 'X', 'X'}};
-        char[][] board = {{'X', 'O', 'X', 'O', 'X', 'O'},{'O', 'X', 'O', 'X', 'O', 'X'}, {'X', 'O', 'X', 'O', 'X', 'O'},{'O', 'X', 'O', 'X', 'O', 'X'}};
-        solution.solve(board);
-        for (int i = 0; i < board.length; i++) {
-//            for(int j=0;j<board[0].length;j++){
-//                System.out.println(board[i][j]);
-//            }
-            System.out.println(board[i]);
+
+
+    static public class Num200_Solution {
+        public int numIslands(char[][] grid) {
+            int h = grid.length, w = grid[0].length;
+            boolean[][] visited = new boolean[h][w];
+            int result = 0;
+            for (int i = 0; i < h; i++) {
+                for (int j = 0; j < w; j++) {
+                    if (grid[i][j] == '1' && !visited[i][j]) {
+                        dfs(grid, i, j, visited);
+                        result++;
+                    }
+                }
+            }
+            return result;
         }
+
+        public void dfs(char[][] grid, int i, int j, boolean[][] visited) {
+            if (i < 0 || j < 0 || i >= grid.length || j >= grid[0].length || visited[i][j] || grid[i][j] == '0') {
+                return;
+            }
+            visited[i][j] = true;
+            dfs(grid, i + 1, j, visited);
+            dfs(grid, i - 1, j, visited);
+            dfs(grid, i, j + 1, visited);
+            dfs(grid, i, j - 1, visited);
+        }
+    }
+
+    public static void main(String[] args) {
+        Num200_Solution solution = new Num200_Solution();
+
+//        char[][] board = {{'X', 'X', 'X', 'X'}, {'X', 'O', 'O', 'X'}, {'X', 'X', 'O', 'X'}, {'X', 'O', 'X', 'X'}};
+        char[][] grid = {{'1', '1', '0', '0', '0'}, {'1', '1', '0', '0', '0'}, {'0', '0', '1', '0', '0'}, {'0', '0', '0', '1', '1'}};
+        System.out.println(solution.numIslands(grid));
+
 //        String test = "123456";
 //        for(int i=0;i<test.length();i++) {
 //            int flag = test.charAt(i) - '1';
