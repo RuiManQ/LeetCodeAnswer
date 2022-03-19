@@ -553,6 +553,34 @@ public class MiddleProblem {
         }
     }
 
+    static public class Num733_Solution {
+        public int[][] floodFill(int[][] image, int sr, int sc, int newColor) {
+            int h = image.length,w=image[0].length;
+//            int [][] result = new int[h][w];
+            boolean [][] visited = new boolean[h][w];
+            dfs(image,sr,sc,visited,image[sr][sc]);
+            for(int i=0;i<h;i++){
+                for(int j=0;j<w;j++){
+                    if(visited[i][j]){
+                        image[i][j] = newColor;
+                    }
+                }
+            }
+            return image;
+
+        }
+        public void dfs(int[][] image, int i, int j, boolean[][] visited,int src) {
+            if (i < 0 || j < 0 || i >= image.length || j >= image[0].length || visited[i][j] || image[i][j] != src) {
+                return;
+            }
+            visited[i][j] = true;
+            dfs(image, i + 1, j, visited,src);
+            dfs(image, i - 1, j, visited,src);
+            dfs(image, i, j + 1, visited,src);
+            dfs(image, i, j - 1, visited,src);
+        }
+    }
+
     public static void main(String[] args) {
         Num200_Solution solution = new Num200_Solution();
 
